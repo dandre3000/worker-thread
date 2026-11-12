@@ -1,0 +1,8 @@
+node_modules/
+build/
+ignore/
+package-lock.json
+deno.lock
+index.html
+*.tsbuildinfo
+dandre3000-worker-thread*.tgz

@@ -1,0 +1,8 @@
+{
+    "include": ["src", "./build.ts"],
+    "compilerOptions": {
+        "types": ["node", "bun"],
+        "noEmit": true,
+        "allowImportingTsExtensions": true
+    }
+}

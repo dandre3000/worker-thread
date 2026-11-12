@@ -1,0 +1,49 @@
+{
+  "name": "@dandre3000/worker-thread",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "DeAundre Payne",
+    "email": "apps.fondling796@passinbox.com",
+    "url": "https://github.com/dandre3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dandre3000/worker-thread.git"
+  },
+  "description": "A class for managing web and node.js Workers.",
+  "keywords": [
+    "thread",
+    "worker",
+    "webworker",
+    "worker_threads",
+    "async",
+    "multithreading",
+    "parallel"
+  ],
+  "files": ["./build"],
+  "exports": {
+    ".": {
+      "browser": {
+        "import": "./build/browser.js",
+        "types": "./build/src/browser/index.d.ts"
+      },
+      "node": {
+        "import": "./build/server.js",
+        "types": "./build/src/browser/index.d.ts"
+      },
+      "types": "./build/src/browser/index.d.ts"
+    }
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.4",
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6"
+  },
+  "scripts": {
+    "build": "tsc --project ./tsconfig.production.json && bun ./build.ts",
+    "prepack": "bun run build"
+  },
+  "type": "module"
+}

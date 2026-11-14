@@ -4,7 +4,7 @@ import { Thread, threadScriptImportedRecord, workerSetupMessageListener } from '
 
 Thread.isMainThread = isMainThread
 setWorker(Worker)
-setWorkerURL(import.meta.url)
+setWorkerURL(new URL(import.meta.url))
 
 if (isMainThread) {
     threadScriptImportedRecord.value = true

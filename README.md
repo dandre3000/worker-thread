@@ -62,15 +62,15 @@ A function that is called when the port connecting the current thread to the one
 #### postMessage (message: any, transfers?: Transferable[] | import("node:worker_threads").Transferable[]): void
 Send a message to the thread associated with this instance.
 
+#### closePort (): void
+Closes the channel connecting the current thread with the one associated with this instance.
+
 ### Class: WorkerThread
 
 #### constructor (scriptURL: string | URL)
 
 #### openPort (thread: Thread): void
 Creates a channel between two workers and a Thread instance on each representing its connection to the other.
-
-#### closePort (thread: Thread): void
-Closes the channel connecting two workers.
 
 #### getConnectedWorkers (): WorkerThread[]
 Returns an array of all workers connected to this.

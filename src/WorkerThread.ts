@@ -74,26 +74,13 @@ export class WorkerThread extends Thread {
         thread.#connectedWorkerThreads.add(this)
     }
 
-    closePort (thread: WorkerThread) {
-        const closePortMessage: ClosePortMessage = {
-            handlerId: 'closePort',
-            args: [this.id]
-        }
-
-        this.#port.postMessage(closePortMessage)
-        thread.#port.postMessage(closePortMessage)
-
-        this.#connectedWorkerThreads.delete(thread)
-        thread.#connectedWorkerThreads.delete(this)
-    }
-
     getConnectedWorkers () {
         return [...this.#connectedWorkerThreads.values()]
     }
 
     terminate () {
         this.#worker.terminate()
-        this.closePort(this)
+        this.closePort()
 
         const closePortMessage: ClosePortMessage = {
             handlerId: 'closePort',

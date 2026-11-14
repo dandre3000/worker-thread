@@ -61,22 +61,17 @@ export class Thread {
         }
     }
 
-    static #closePort = (thread: Thread, id?: UUID) => {
-        if (id) thread = this.#connectedIdToThreadMap.get(id) as Thread
-
-        thread.#port.close()
-        thread.#port.removeEventListener('message', thread.#messageListenerObject, true)
-        Thread.#connectedIdToThreadMap.delete(thread.id)
-        thread.#onClosePortHandler?.(thread)
-    }
-
     static #postMessage = (thread: Thread, message: any) => {
         thread.#onMessageHandler?.(message)
     }
 
     static #idToHandlerMap = new Map<number | string, Function>([
         ['openPort', Thread.#openPort],
-        ['closePort', Thread.#closePort],
+        ['closePort', (thread: Thread, id?: UUID) => {
+            if (id) thread = this.#connectedIdToThreadMap.get(id) as Thread
+
+            thread.closePort()
+        }],
         ['postMessage', Thread.#postMessage]
     ])
 
@@ -171,6 +166,13 @@ export class Thread {
         }
 
         this.#port.postMessage(userMessage, transfers as any)
+    }
+
+    closePort () {
+        this.#port.close()
+        this.#port.removeEventListener('message', this.#messageListenerObject, true)
+        Thread.#connectedIdToThreadMap.delete(this.id)
+        this.#onClosePortHandler?.(this)
     }
 }
 

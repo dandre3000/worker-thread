@@ -56,6 +56,7 @@ export class Thread {
         threadScriptImportedRecord.value = true
 
         for (const [id, thread] of Thread.#connectedIdToThreadMap) {
+            thread.#port.addEventListener('message', thread.#messageListenerObject, true)
             thread.#port.start()
             Thread.#onOpenPortHandler?.(thread)
         }
@@ -130,10 +131,11 @@ export class Thread {
         const [symbol, id, port] = arguments as any as [symbol: typeof moduleSymbol, id: UUID | 'main', port: MessagePort]
         if (symbol !== moduleSymbol) throw new Error('Illegal constructor')
 
-        port.addEventListener('message', this.#messageListenerObject, true)
-        if (threadScriptImportedRecord.value)
+        // delay start until worker script is imported
+        if (threadScriptImportedRecord.value) {
+            port.addEventListener('message', this.#messageListenerObject, true)
             port.start()
-        else
+        } else
             threadPorts.push(port)
 
         this.id = id

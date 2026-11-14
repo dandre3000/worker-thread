@@ -14,21 +14,26 @@ interface OpenPortMessage extends ThreadMessage {
     args: [UUID, MessagePort]
 }
 
-export let setWorker = null as any as (constructor: typeof Worker | typeof NodeWorker) => void
-export let setWorkerURL = null as any as (url: string | URL) => void
+export let setRuntimeVariables: (
+    isMainThread: boolean,
+    WorkerConstructor: typeof Worker | typeof NodeWorker,
+    workerURL: string | URL
+) => void
 
 export class WorkerThread extends Thread {
-    static #Worker = (() => {
-        setWorker = constructor => WorkerThread.#Worker = constructor
+    static #Worker: typeof Worker | typeof NodeWorker
 
-        return null as any as typeof Worker | typeof NodeWorker
-    })()
+    static #workerURL: string | URL
 
-    static #workerURL = (() => {
-        setWorkerURL = url => WorkerThread.#workerURL = url
-
-        return null as any as string | URL
-    })()
+    static #setRuntimeVariables = setRuntimeVariables = (
+        isMainThread, 
+        WorkerConstructor, 
+        workerURL
+    ) => {
+        Thread.isMainThread = isMainThread
+        WorkerThread.#Worker = WorkerConstructor
+        WorkerThread.#workerURL = workerURL
+    }
 
     #port: MessagePort
     #worker: Worker | NodeWorker

@@ -1,10 +1,12 @@
 import { isMainThread, parentPort, Worker } from 'node:worker_threads'
-import { setWorker, setWorkerURL, WorkerThread } from '../WorkerThread.ts'
+import { setRuntimeVariables, WorkerThread } from '../WorkerThread.ts'
 import { Thread, threadScriptImportedRecord, workerSetupMessageListener } from '../Thread.ts'
 
-Thread.isMainThread = isMainThread
-setWorker(Worker)
-setWorkerURL(new URL(import.meta.url))
+setRuntimeVariables(
+    isMainThread,
+    Worker,
+    new URL(import.meta.url)
+)
 
 if (isMainThread) {
     threadScriptImportedRecord.value = true
